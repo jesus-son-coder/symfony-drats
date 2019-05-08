@@ -8,10 +8,30 @@
 
 namespace App\Event;
 
+use Swift_Mailer;
+use Swift_Message;
+// use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Twig\Environment;
 
 class CommentPublishedSubscriber implements EventSubscriberInterface
 {
+
+    /**
+     * @var Swift_Mailer $_mailer
+     */
+    private $_mailer;
+
+    /**
+     * @var EngineInterface $_engine
+     */
+    private $_engine;
+
+    public function __construct(\Swift_Mailer $mailer, Environment $engine)
+    {
+        $this->_mailer = $mailer;
+        $this->_engine = $engine;
+    }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -59,6 +79,22 @@ class CommentPublishedSubscriber implements EventSubscriberInterface
 
     public function onCommentPublished(CommentPublishedEvent $event)
     {
+        // send email to the publisher
+        //dump($event);
+
+        $comment = $event->getComment();
+        $article = $event->getArticle();
+
+        $message = (new Swift_Message($comment->getName(), 'Comment on your article : ' . $article->getTitle()))
+            ->setFrom('sekaherve.chc@gmail.com')
+            ->setTo('sekaherve.chc@gmail.com')
+            ->setBody($this->_engine->render('mail/mail.html.twig', [
+                'comment' => $comment,
+                'article' => $article
+            ]))
+        ;
+
+        return $this->_mailer->send($message);
 
     }
 }

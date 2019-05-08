@@ -23,7 +23,7 @@ class CommentPublishedEvent extends Event
 
     public function getArticle()
     {
-        $this->_comment->getArticle();
+        return $this->_comment->getArticle();
     }
 
 }
