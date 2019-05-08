@@ -97,8 +97,14 @@ class Article
         return $this;
     }
 
-    public function __toString(): string
+    public function __toString(): ?string
     {
-        return $this->getTitle();
+        $title = $this->getTitle();
+        if(null == $title) {
+            return 'NULL';
+        }
+        return $title;
     }
+
+
 }

@@ -41,9 +41,11 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comments")
-     * @ORM\JoinColumn(name="article_id_20190508" , referencedColumnName="id", nullable=false)
+     *
      */
     private $article;
+    // ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comments", cascade={"persist"})
+    // @ORM\JoinColumn(name="article_id_20190508" , referencedColumnName="id")
 
 
     public function __construct() { }

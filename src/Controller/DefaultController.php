@@ -38,8 +38,6 @@ class DefaultController extends AbstractController
      */
     public function viewAction(Request $request, ObjectManager $manager, EventDispatcherInterface $dispatcher)
     {
-        $article = new Article();
-
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment);
@@ -47,8 +45,6 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-
-            $comment->setArticle($article);
 
             $manager->persist($comment);
             $manager->flush();
@@ -60,8 +56,7 @@ class DefaultController extends AbstractController
         }
 
         return $this->render('default/view.html.twig', [
-            'form' => $form->createView(),
-            'article' => $article
+            'form' => $form->createView()
         ]);
     }
 
