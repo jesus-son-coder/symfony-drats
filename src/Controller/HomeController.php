@@ -31,6 +31,7 @@ class HomeController extends AbstractController
         $post->setTitle('Overseas Media');
         $post->setContent('Is trash');
 
+        /*
         $normalizers = [
             new ObjectNormalizer(),
         ];
@@ -45,14 +46,13 @@ class HomeController extends AbstractController
             ObjectNormalizer::SKIP_NULL_VALUES  => true
         ]);
 
-        /* ou :
-        $serializedData = $serializer->serialize($post, 'json',[
-            'skip_null_values' => true
-        ]); */
-
         var_dump($serializedData);die();
 
-        return $this->json($post);
+        */
+
+        return $this->json($post, Response::HTTP_OK, [], [
+            ObjectNormalizer::SKIP_NULL_VALUES  => true
+        ]);
     }
 
 }
