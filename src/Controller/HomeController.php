@@ -52,9 +52,10 @@ class HomeController extends AbstractController
 
         return $this->json($post, Response::HTTP_OK, [], [
             // ObjectNormalizer::SKIP_NULL_VALUES  => true,
-            //ObjectNormalizer::GROUPS => ['admin', 'users']
+            // ObjectNormalizer::GROUPS => ['admin', 'users']
             // ObjectNormalizer::GROUPS => ['admin'],
-            ObjectNormalizer::ATTRIBUTES => ['title','content']
+            // ObjectNormalizer::ATTRIBUTES => ['title','content']
+            // ObjectNormalizer::IGNORED_ATTRIBUTES => ['title']
         ]);
     }
 
