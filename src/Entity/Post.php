@@ -30,7 +30,6 @@ class Post
     /**
      * @ORM\Column(type="text")
      * @Groups({"users", "admin"})
-     * @SerializedName("post_content")
      */
     private $content;
 

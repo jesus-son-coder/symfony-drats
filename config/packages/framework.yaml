@@ -15,3 +15,11 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+    serializer:
+        name_converter: 'App\Serializer\OverseasNameConverter'
+        # name_converter: 'serializer.name_converter.camel_case_to_snake_case'
+        # https://symfony.com/doc/current/serializer.html
+        # section : Enabling a Name Converter
+
+
