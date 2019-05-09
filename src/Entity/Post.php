@@ -26,7 +26,7 @@ class Post
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"users"})
+     * @Groups({"users", "admin"})
      */
     private $content;
 
