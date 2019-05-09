@@ -14,6 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 
 class HomeController extends AbstractController
@@ -27,6 +30,27 @@ class HomeController extends AbstractController
 
         $post->setTitle('Overseas Media');
         $post->setContent('Is trash');
+
+        $normalizers = [
+            new ObjectNormalizer(),
+        ];
+
+        $encoders = [
+            new JsonEncoder(),
+        ];
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $serializedData = $serializer->serialize($post, 'json',[
+            ObjectNormalizer::SKIP_NULL_VALUES  => true
+        ]);
+
+        /* ou :
+        $serializedData = $serializer->serialize($post, 'json',[
+            'skip_null_values' => true
+        ]); */
+
+        var_dump($serializedData);die();
 
         return $this->json($post);
     }
