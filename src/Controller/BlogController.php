@@ -12,6 +12,9 @@ use App\Service\Greeting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -19,25 +22,56 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class BlogController extends AbstractController
 {
-    private $greeting;
+    private $session;
 
-    public function __construct(Greeting $greeting)
+    public function __construct(SessionInterface $session)
     {
-        $this->greeting = $greeting;
+        $this->session = $session;
     }
 
     /**
-     * @param Request $request
-     *
-     * @Route("/home/{name}", name="blog_index")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/home", name="blog_index")
      */
-    public function index($name)
+    public function index()
     {
+        return $this->render('blog/index.html.twig', [
+            'posts' => $this->session->get('posts')
+        ]);
+    }
 
-        // $service_greetinng = $this->get('app.greeting');
 
-        return $this->render('base.html.twig', ['message' => $this->greeting->hello() . $name]);
+    /**
+     * @Route("/add", name="blog_add")
+     */
+    public function add()
+    {
+        $posts = $this->session->get('posts');
+        $posts[uniqid()] = [
+            'title' => 'A random title ' . rand(1,500),
+            'text' => 'Some random text nr ' . rand(1,500),
+        ];
+        $this->session->set('posts', $posts);
+
+        // return new Response("Un nouveau Post a été rajouté en Session !");
+        return $this->redirectToRoute('blog_index');
+
+    }
+
+    /**
+     * @Route("/show/{id}", name="blog_show")
+     */
+    public function show($id)
+    {
+        $posts = $this->session->get('posts');
+
+        if(!$posts || !isset($posts[$id])){
+            throw new NotFoundHttpException('Post not found');
+        }
+
+        return $this->render('blog/post.html.twig', [
+            'id' => $id,
+            'post' => $posts[$id]
+        ]);
+
     }
 }
