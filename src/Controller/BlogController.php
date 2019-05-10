@@ -10,11 +10,11 @@ namespace App\Controller;
 
 use App\Service\Greeting;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+// use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BlogController extends Controller
+class BlogController extends AbstractController
 {
     private $greeting;
 
@@ -35,8 +35,8 @@ class BlogController extends Controller
     public function index(Request $request)
     {
 
-        $service_greetinng = $this->get('app.greeting');
+        // $service_greetinng = $this->get('app.greeting');
 
-        return $this->render('base.html.twig', ['message' => $service_greetinng->hello()]);
+        return $this->render('base.html.twig', ['message' => $this->greeting->hello()]);
     }
 }
