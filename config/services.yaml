@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    hello_message: 'Hello from service'
 
 services:
     # default configuration for services in *this* file
@@ -31,3 +32,7 @@ services:
         public: true
         # public: true  => permet de faire en sorte que le Service Container puisse accéder directement à ce service.
         alias: App\Service\Greeting
+
+    App\Twig\AppExtension:
+        arguments:
+            $locale: '%locale%'
