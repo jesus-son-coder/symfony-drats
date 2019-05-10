@@ -27,3 +27,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    app.greeting:
+        public: true
+        # public: true  => permet de faire en sorte que le Service Container puisse accéder directement à ce service.
+        alias: App\Service\Greeting
