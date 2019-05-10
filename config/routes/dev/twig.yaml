@@ -1,3 +1,7 @@
 _errors:
     resource: '@TwigBundle/Resources/config/routing/errors.xml'
     prefix: /_error
+    # Le préfixe pour simuler les erreur de Prod se définit ici.
+    # Dans le cas actuel, ce préfixe est égal à '/_error'
+    # Pour tester une page d'erreur, par exemple, saisissez l'url ci-dessous :
+    # "http://127.0.0.1:8000/_error/404"
