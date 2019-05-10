@@ -11,4 +11,13 @@
     <br><br>
     Variable spécifique au template Twig :
     Message : {{ message }}
+    <br>
+    <hr>
+    Les variables globales prédéfinies de Twig :
+    <hr>
+    <p><strong>Env :</strong> {{ app.environment }}</p>
+    <p><strong>User :</strong> {{ app.user }}</p>
+    <p><strong>Request :</strong> {{ app.request }}</p>
+    <p><strong>Session started :</strong> {{ app.session.isStarted() }}</p>
+    <p><strong>Debug :</strong> {{ app.debug }}</p>
 {% endblock %}
