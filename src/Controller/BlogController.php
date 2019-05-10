@@ -18,8 +18,6 @@ class BlogController extends AbstractController
 {
     private $greeting;
 
-    private $badDesign;
-
     public function __construct(Greeting $greeting)
     {
         $this->greeting = $greeting;
@@ -28,15 +26,15 @@ class BlogController extends AbstractController
     /**
      * @param Request $request
      *
-     * @Route("/home", name="blog_index")
+     * @Route("/home/{name}", name="blog_index")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(Request $request)
+    public function index($name)
     {
 
         // $service_greetinng = $this->get('app.greeting');
 
-        return $this->render('base.html.twig', ['message' => $this->greeting->hello()]);
+        return $this->render('base.html.twig', ['message' => $this->greeting->hello() . $name]);
     }
 }
