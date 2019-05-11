@@ -6,6 +6,11 @@
     <h1>MicroPosts</h1>
     <hr>
 
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
     <small class="d-block text-right mt-3">
         <a href="{{ path('micro_post_add') }}">Add new</a>
     </small>
