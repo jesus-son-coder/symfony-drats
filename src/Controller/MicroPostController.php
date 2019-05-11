@@ -8,6 +8,10 @@
 
 namespace App\Controller;
 
+use App\Entity\MicroPost;
+use App\Form\MicroPostType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +25,14 @@ use App\Repository\MicroPostRepository;
 class MicroPostController extends AbstractController
 {
     private $microPostRepository;
+    private $formFactory;
+    private $entityManager;
 
-    public function __construct(MicroPostRepository $microPostRepository)
+    public function __construct(MicroPostRepository $microPostRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager)
     {
         $this->microPostRepository = $microPostRepository;
+        $this->formFactory = $formFactory;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -34,6 +42,29 @@ class MicroPostController extends AbstractController
     {
         return $this->render('micro-post/index.html.twig',[
             'posts' => $this->microPostRepository->findAll()
+        ]);
+    }
+
+    /**
+     * @Route("/add", name="micro_post_add")
+     */
+    public function add(Request $request)
+    {
+        $micropost = new MicroPost();
+        $micropost->setTime(new \DateTime());
+
+        $form = $this->formFactory->create(MicroPostType::class, $micropost);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid() ) {
+            $this->entityManager->persist($micropost);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('micro_post_index');
+        }
+
+        return $this->render('micro-post/add.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }
