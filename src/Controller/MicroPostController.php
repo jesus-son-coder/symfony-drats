@@ -71,9 +71,10 @@ class MicroPostController extends AbstractController
     /**
      * @Route("/{id}", name="micro_post_post")
      */
-    public function post($id)
+    public function post(MicroPost $post)
     {
-        $post = $this->microPostRepository->find($id);
+        // Du coup nous n'avons plus besoin d'utiliser explicitement le Repository !!
+        // $post = $this->microPostRepository->find($post->getId());
 
         return $this->render('micro-post/post.html.twig',[
             'post' => $post
