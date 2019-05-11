@@ -53,8 +53,8 @@ class BlogController extends AbstractController
         ];
         $this->session->set('posts', $posts);
 
-        // return new Response("Un nouveau Post a été rajouté en Session !");
-        return $this->redirectToRoute('blog_index');
+        return new Response("Un nouveau Post a été rajouté en Session !");
+        // return $this->redirectToRoute('blog_index');
 
     }
 

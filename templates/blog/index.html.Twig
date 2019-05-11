@@ -5,12 +5,6 @@
 {% block body %}
     <h1>Welcome !</h1>
 
-    {% for id, post in posts %}
-        <p><a href="{{ path('blog_show', {'id': id}) }}">ID {{ id }}</a></p>
-        <h3>{{ post.title }}</h3>
-        <p>{{ post.text }}</p>
-        {% if post.date %}<p>{{ post.date | date('d/m/Y') }}</p>{% endif %}
-        {{ 530 | price }}
-    {% endfor %}
+
 
 {% endblock %}
