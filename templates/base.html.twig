@@ -8,18 +8,14 @@
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         {% endblock %}
     </head>
-    <body>
+    <body class="bg-light">
     <div class="container">
         <div class="bg-light">
             <main role="main" class="container">
                 <div class="my-3 p-3 bg-white rounded box-shadow">
-                    <h6 class="border-bottom border-gray pb-2 mb-8">Recent updates</h6>
 
                     {% block body %}{% endblock %}
 
-                    <small class="d-block text-right mt-3">
-                        <a href="#">All updates</a>
-                    </small>
                 </div>
             </main>
         </div>
