@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un MicroPost{% endblock %}
+
+{% block body %}
+    <h1>Modifier un MicroPost</h1>
+    <hr>
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form) }}
+
+    {{ form_end(form) }}
+
+{% endblock %}
