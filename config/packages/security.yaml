@@ -18,8 +18,30 @@ security:
             # http_basic: true
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
 
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
+            form_login:
+                # https://symfony.com/doc/current/security/form_login_setup.html
+                check_path: security_login
+                login_path: security_login
+                    # "login_path"; c'est la route vers laquelle l'utilisateur est redirigé lorsqu'il tente d'accéder à une page sans être authentifié... C'est aussi la route à partir de laquelle on restitue la page du formulaire de connexion.
+                csrf_token_generator: security.csrf.token_manager
+                
+                default_target_path: micro_post_index
+                    # "default_target_path": It is the route where user will be redirected where no previous page whith restricted access wa visited by the user, prior to the Login form.
+
+                # always_use_default_target_path: true
+                    # "always_use_default_target_path" : this option is used if you would like to always redirect user, after they are logged in by the Login form to a specific url which is "default_target_path"
+
+                # use_referer: true
+                    # "use_referer": this will make the user redirected to the last visited page, except if the last visited page was before the login form.
+
+                # failture_path:
+                    # "failure_path": this is the route where th user will be redirected if he failed the authentication on the login form. By defautl, the user would be redirected back to the login form.
+
+
+            logout:
+                path: security_logout
+                target: micro_post_index
+
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
