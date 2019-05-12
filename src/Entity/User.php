@@ -23,17 +23,25 @@ class User implements UserInterface, \Serializable
     private $username;
 
     /**
-     * @var @ORM\Column(type="string")
+     * @ORM\Column(type="string")
      */
     private $password;
 
     /**
-     * @var @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
     /**
-     * @var @ORM\Column(type="string", length=50)
+     * @param mixed $fullName
+     */
+    public function setFullName($fullName): void
+    {
+        $this->fullName = $fullName;
+    }
+
+    /**
+     * @ORM\Column(type="string", length=50)
      */
     private $fullName;
 
