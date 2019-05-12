@@ -24,7 +24,7 @@ security:
                 login_path: security_login
                     # "login_path"; c'est la route vers laquelle l'utilisateur est redirigé lorsqu'il tente d'accéder à une page sans être authentifié... C'est aussi la route à partir de laquelle on restitue la page du formulaire de connexion.
                 csrf_token_generator: security.csrf.token_manager
-                
+
                 default_target_path: micro_post_index
                     # "default_target_path": It is the route where user will be redirected where no previous page whith restricted access wa visited by the user, prior to the Login form.
 
