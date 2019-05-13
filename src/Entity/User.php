@@ -36,7 +36,7 @@ class User implements UserInterface, \Serializable
     /**
      * Cette propriété ne sera pas stockée en Base de données !
      * @Assert\NotBlank()
-     * @Assert\Length(min=8, max=4096)
+     * @Assert\Length(min=6, max=4096)
      */
     private $plainPassword;
 
@@ -105,6 +105,22 @@ class User implements UserInterface, \Serializable
     public function setEmail($email): void
     {
         $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     public function getRoles()
