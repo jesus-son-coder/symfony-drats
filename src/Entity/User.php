@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -48,6 +50,11 @@ class User implements UserInterface, \Serializable
     private $email;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MicroPost", mappedBy="user")
+     */
+    private $posts;
+
+    /**
      * @param mixed $fullName
      */
     public function setFullName($fullName): void
@@ -77,6 +84,11 @@ class User implements UserInterface, \Serializable
      * @Assert\Length(min=4, max=50)
      */
     private $fullName;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -164,5 +176,36 @@ class User implements UserInterface, \Serializable
         list($this->id,
             $this->username,
             $this->password) = unserialize($serialized);
+    }
+
+    /**
+     * @return Collection|MicroPost[]
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(MicroPost $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(MicroPost $post): self
+    {
+        if ($this->posts->contains($post)) {
+            $this->posts->removeElement($post);
+            // set the owning side to null (unless already changed)
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
