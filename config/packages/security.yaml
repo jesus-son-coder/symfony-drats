@@ -23,6 +23,11 @@ security:
                 check_path: security_login
                 login_path: security_login
                     # "login_path"; c'est la route vers laquelle l'utilisateur est redirigé lorsqu'il tente d'accéder à une page sans être authentifié... C'est aussi la route à partir de laquelle on restitue la page du formulaire de connexion.
+                # username_parameter: _username
+                # password_username: _password
+                # csrf_parameter: _csrf_token
+                    # Si on souhaite modifier les propriétés "name" des champs "username" et "password", c'est par ici. Sinon par défaut, Symfony prendra les valeur ci-dessus, cad : "_usernmae", "_password" et "_csrf" pour le champ caché de contrôle "csrf"
+
                 csrf_token_generator: security.csrf.token_manager
 
                 default_target_path: micro_post_index
