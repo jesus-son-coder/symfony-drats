@@ -1,4 +1,12 @@
 security:
+    access_decision_manager:
+        strategy: affirmative
+        # Voters :
+        # --------
+        # "affirmative" : (default) autorise l'accès dès qu'il y a au moins un Voter qui l'autorise.
+        # "consensus" : autorise l'accès quand il y a une majorité de Voters qui autorise l'accès, par rapport au nombre qui dénient l'accès.
+        # "unanimous" : n'autorise l'accès que lorsque la totalité des Voters l'autorisent. Si un seul Voter le dénie, alors l'accès n'est pas autotisé.
+        
     encoders:
         App\Entity\User: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
