@@ -13,12 +13,14 @@ use App\Form\MicroPostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Repository\MicroPostRepository;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * @Route("/micro-post")
@@ -29,13 +31,15 @@ class MicroPostController extends AbstractController
     private $formFactory;
     private $entityManager;
     private $flashBag;
+    private $authorizationChecker;
 
-    public function __construct(MicroPostRepository $microPostRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, FlashBagInterface $flashBag)
+    public function __construct(MicroPostRepository $microPostRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, FlashBagInterface $flashBag, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->microPostRepository = $microPostRepository;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
         $this->flashBag = $flashBag;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -53,8 +57,9 @@ class MicroPostController extends AbstractController
      */
     public function edit(MicroPost $microPost, Request $request)
     {
-        // Restreint l'accès grace au Voter :
-        $this->denyAccessUnlessGranted('edit', $microPost);
+        if(! $this->authorizationChecker->isGranted('edit', $microPost)) {
+            throw new UnauthorizedHttpException();
+        }
 
         $form = $this->formFactory->create(MicroPostType::class, $microPost);
         $form->handleRequest($request);
@@ -80,9 +85,10 @@ class MicroPostController extends AbstractController
      */
     public function delete(MicroPost $microPost)
     {
-        // Restreint l'accès grace au Voter :
-        $this->denyAccessUnlessGranted('delete', $microPost);
-        
+        if(! $this->authorizationChecker->isGranted('delete', $microPost)) {
+            throw new UnauthorizedHttpException();
+        }
+
         $this->entityManager->remove($microPost);
         $this->entityManager->flush();
 
