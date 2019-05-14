@@ -53,6 +53,9 @@ class MicroPostController extends AbstractController
      */
     public function edit(MicroPost $microPost, Request $request)
     {
+        // Restreint l'accès grace au Voter :
+        $this->denyAccessUnlessGranted('edit', $microPost);
+
         $form = $this->formFactory->create(MicroPostType::class, $microPost);
         $form->handleRequest($request);
 
@@ -77,6 +80,9 @@ class MicroPostController extends AbstractController
      */
     public function delete(MicroPost $microPost)
     {
+        // Restreint l'accès grace au Voter :
+        $this->denyAccessUnlessGranted('delete', $microPost);
+        
         $this->entityManager->remove($microPost);
         $this->entityManager->flush();
 
