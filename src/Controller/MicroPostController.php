@@ -54,13 +54,10 @@ class MicroPostController extends AbstractController
 
     /**
      * @Route("/edit/{id}", name="micro_post_edit")
+     * @Security("is_granted('edit', microPost)", message="Access denied")
      */
     public function edit(MicroPost $microPost, Request $request)
     {
-        if(! $this->authorizationChecker->isGranted('edit', $microPost)) {
-            throw new UnauthorizedHttpException();
-        }
-
         $form = $this->formFactory->create(MicroPostType::class, $microPost);
         $form->handleRequest($request);
 
@@ -82,13 +79,10 @@ class MicroPostController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="micro_post_delete")
+     * @Security("is_granted('delete', microPost)", message="Access denied")
      */
     public function delete(MicroPost $microPost)
     {
-        if(! $this->authorizationChecker->isGranted('delete', $microPost)) {
-            throw new UnauthorizedHttpException();
-        }
-
         $this->entityManager->remove($microPost);
         $this->entityManager->flush();
 
