@@ -10,9 +10,11 @@ security:
     encoders:
         App\Entity\User: bcrypt
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+
     providers:
         database_users:
             entity: { class: App\Entity\User, property: username }
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -30,16 +32,17 @@ security:
                 # https://symfony.com/doc/current/security/form_login_setup.html
                 check_path: security_login
                 login_path: security_login
-                    # "login_path"; c'est la route vers laquelle l'utilisateur est redirigé lorsqu'il tente d'accéder à une page sans être authentifié... C'est aussi la route à partir de laquelle on restitue la page du formulaire de connexion.
+                    # "login_path": c'est la route vers laquelle l'utilisateur est redirigé lorsqu'il tente d'accéder à une page sans être authentifié... C'est aussi la route à partir de laquelle on restitue la page du formulaire de connexion.
+                # Autre Paramètres possibles pour cette section (voi ci-dessous):
                 # username_parameter: _username
                 # password_username: _password
                 # csrf_parameter: _csrf_token
-                    # Si on souhaite modifier les propriétés "name" des champs "username" et "password", c'est par ici. Sinon par défaut, Symfony prendra les valeur ci-dessus, cad : "_usernmae", "_password" et "_csrf" pour le champ caché de contrôle "csrf"
+                    # Si on souhaite modifier les propriétés "name" des champs "username" et "password", c'est par ici. Sinon par défaut, Symfony prendra les valeur ci-dessus, cad : "_usernmane", "_password" et "_csrf" pour le champ caché de contrôle "csrf"
 
                 csrf_token_generator: security.csrf.token_manager
 
                 default_target_path: micro_post_index
-                    # "default_target_path": It is the route where user will be redirected where no previous page whith restricted access wa visited by the user, prior to the Login form.
+                    # "default_target_path": It is the route where user will be redirected where no previous page whith restricted access was visited by the user, prior to the Login form.
 
                 # always_use_default_target_path: true
                     # "always_use_default_target_path" : this option is used if you would like to always redirect user, after they are logged in by the Login form to a specific url which is "default_target_path"

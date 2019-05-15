@@ -16,6 +16,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface, \Serializable
 {
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -50,33 +53,15 @@ class User implements UserInterface, \Serializable
     private $email;
 
     /**
+     * @var array
+     * @ORM\Column(type="simple_array")
+     */
+    private $roles;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\MicroPost", mappedBy="user")
      */
     private $posts;
-
-    /**
-     * @param mixed $fullName
-     */
-    public function setFullName($fullName): void
-    {
-        $this->fullName = $fullName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    /**
-     * @param mixed $plainPassword
-     */
-    public function setPlainPassword($plainPassword): void
-    {
-        $this->plainPassword = $plainPassword;
-    }
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -137,9 +122,27 @@ class User implements UserInterface, \Serializable
 
     public function getRoles()
     {
+        /*
         return [
           'ROLE_USER'
-        ];
+        ]; */
+        return $this->roles;
+    }
+
+    /**
+     * @param array $roles
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
+
+    /**
+     * @param mixed $posts
+     */
+    public function setPosts($posts): void
+    {
+        $this->posts = $posts;
     }
 
     public function getPassword()
@@ -208,4 +211,30 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @param mixed $fullName
+     */
+    public function setFullName($fullName): void
+    {
+        $this->fullName = $fullName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword): void
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+
 }
