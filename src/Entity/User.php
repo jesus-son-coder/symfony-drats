@@ -236,5 +236,6 @@ class User implements UserInterface, \Serializable
         $this->plainPassword = $plainPassword;
     }
 
+	/* test */
 
 }
