@@ -11,12 +11,19 @@ namespace App\Security;
 use App\Entity\MicroPost;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class MicroPostVoter extends Voter
 {
     const EDIT = 'edit';
     const DELETE = 'delete';
+    private $accessDecisionManager;
+
+    public function __construct(AccessDecisionManagerInterface $accessDecisionManager)
+    {
+        $this->accessDecisionManager = $accessDecisionManager;
+    }
 
     /**
      * Determines if the attribute and subject are supported by this voter.
@@ -51,6 +58,13 @@ class MicroPostVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
+        /* Si l'utilisateur a le rôle "ADMIN", alors on lui donne d'emblée tous les droits sur les différents attributs,
+            et pas besoin de poursuivre les autres vérifications, on fait un "return" sur  la fonction : */
+        if($this->accessDecisionManager->decide($token, [User::ROLE_ADMIN])) {
+            return true;
+        }
+
+        /* Récupération de l'utilisateur actuellement connecté : */
         $authenticatedUser = $token->getUser();
 
         /* Nous ne souhaitons pas qu'unn utlisateur non connecté puisse effectuer les actions
