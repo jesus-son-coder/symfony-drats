@@ -10,6 +10,7 @@ namespace App\Controller;
 
 use App\Entity\MicroPost;
 use App\Form\MicroPostType;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -127,9 +128,11 @@ class MicroPostController extends AbstractController
     public function userPosts(User $userWithPosts)
     {
         return $this->render('micro-post/index.html.twig',[
-            'posts' => $this->microPostRepository->findBy(
+            /* 'posts' => $this->microPostRepository->findBy(
                 ['user' => $userWithPosts],
-                ['time' => 'DESC'])
+                ['time' => 'DESC']
+            ) */
+            'posts' => $userWithPosts->getPosts()
         ]);
     }
 
