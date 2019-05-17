@@ -95,11 +95,15 @@ class MicroPostController extends AbstractController
 
     /**
      * @Route("/add", name="micro_post_add")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function add(Request $request)
     {
+        $user = $this->getUser();
+
         $micropost = new MicroPost();
         $micropost->setTime(new \DateTime());
+        $micropost->setUser($user);
 
         $form = $this->formFactory->create(MicroPostType::class, $micropost);
         $form->handleRequest($request);
