@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use App\Repository\MicroPostRepository;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -120,6 +119,21 @@ class MicroPostController extends AbstractController
         ]);
     }
 
+
+    /**
+     * Display all the Posts from a certain USer.
+     * @Route("/user/{username}", name="micro_post_user")
+     */
+    public function userPosts(User $userWithPosts)
+    {
+        return $this->render('micro-post/index.html.twig',[
+            'posts' => $this->microPostRepository->findBy(
+                ['user' => $userWithPosts],
+                ['time' => 'DESC'])
+        ]);
+    }
+
+
     /**
      * @Route("/{id}", name="micro_post_post")
      */
@@ -132,4 +146,6 @@ class MicroPostController extends AbstractController
             'post' => $post
         ]);
     }
+
+
 }
