@@ -24,12 +24,17 @@ class FollowingController extends Controller
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
-        /* Ajouter le User en paramètre dans sa liste de Followers : */
-        $currentUser->getFollowing()->add($userToFollow);
+        /* Eviter que l'utilisateur connecté puisse exécuter l'action : */
+        if($userToFollow->getId() !== $currentUser->getId()) {
 
-        $this->getDoctrine()
-            ->getManager()
-            ->flush();
+            /* Ajouter le User en paramètre dans sa liste de Followers : */
+            $currentUser->getFollowing()
+                ->add($userToFollow);
+
+            $this->getDoctrine()
+                ->getManager()
+                ->flush();
+        }
 
         return $this->redirectToRoute('micro_post_user', [
             'username' => $userToFollow->getUsername()
@@ -44,12 +49,17 @@ class FollowingController extends Controller
         /** @var User $currentUser */
         $currentUser = $this->getUser();
 
-        /* Retrancher le User en paramètre de sa liste de Followers : */
-        $currentUser->getFollowing()->removeElement($userToUnFollow);
+        /* Eviter que l'utilisateur connecté puisse exécuter l'action : */
+        if($userToUnFollow->getId() !== $currentUser->getId()) {
 
-        $this->getDoctrine()
-            ->getManager()
-            ->flush();
+            /* Retrancher le User en paramètre de sa liste de Followers : */
+            $currentUser->getFollowing()->removeElement($userToUnFollow);
+
+            $this->getDoctrine()
+                ->getManager()
+                ->flush();
+
+        }
 
         return $this->redirectToRoute('micro_post_user', [
             'username' => $userToUnFollow->getUsername()
