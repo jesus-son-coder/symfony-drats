@@ -258,7 +258,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
     public function getFollowers()
     {
@@ -266,7 +266,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
     public function getFollowing()
     {
