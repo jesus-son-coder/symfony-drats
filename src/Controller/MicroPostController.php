@@ -48,8 +48,21 @@ class MicroPostController extends AbstractController
      */
     public function index()
     {
+        // Get the User connected :
+        $currentUser = $this->getUser();
+        // or $currentUser = $tokenStorage->getToken()->getUser();
+
+        if ($currentUser instanceof User) {
+            // Here we are sure that the currentUser is Authenticated.
+            // and we get who the current connected User follows with "$currentUser->getFollowing()" :
+            $posts = $this->microPostRepository->findAllByUsers($currentUser->getFollowing());
+        } else {
+            // Here the currentUser is not Authenticated (Anonymous User) :
+            $posts = $this->microPostRepository->findBy([], ['time' => 'DESC']);
+        }
+
         return $this->render('micro-post/index.html.twig',[
-            'posts' => $this->microPostRepository->findBy([], ['time' => 'DESC'])
+            'posts' => $posts
         ]);
     }
 
