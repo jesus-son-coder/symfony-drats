@@ -11,6 +11,7 @@ namespace App\Controller;
 use App\Entity\MicroPost;
 use App\Form\MicroPostType;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -29,14 +30,16 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class MicroPostController extends AbstractController
 {
     private $microPostRepository;
+    private $userRepository;
     private $formFactory;
     private $entityManager;
     private $flashBag;
     private $authorizationChecker;
 
-    public function __construct(MicroPostRepository $microPostRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, FlashBagInterface $flashBag, AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(MicroPostRepository $microPostRepository, UserRepository $userRepository, FormFactoryInterface $formFactory, EntityManagerInterface $entityManager, FlashBagInterface $flashBag, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->microPostRepository = $microPostRepository;
+        $this->userRepository = $userRepository;
         $this->formFactory = $formFactory;
         $this->entityManager = $entityManager;
         $this->flashBag = $flashBag;
@@ -52,17 +55,25 @@ class MicroPostController extends AbstractController
         $currentUser = $this->getUser();
         // or $currentUser = $tokenStorage->getToken()->getUser();
 
+        $usersToFollow = [];
+
         if ($currentUser instanceof User) {
             // Here we are sure that the currentUser is Authenticated.
             // and we get who the current connected User follows with "$currentUser->getFollowing()" :
             $posts = $this->microPostRepository->findAllByUsers($currentUser->getFollowing());
+
+            $usersToFollow = count($posts) === 0 ?
+                $this->userRepository->findAllWithMoreThan5PostsExceptUser($currentUser)
+                : [] ;
+
         } else {
             // Here the currentUser is not Authenticated (Anonymous User) :
             $posts = $this->microPostRepository->findBy([], ['time' => 'DESC']);
         }
 
         return $this->render('micro-post/index.html.twig',[
-            'posts' => $posts
+            'posts' => $posts,
+            'usersToFollow' => $usersToFollow
         ]);
     }
 
