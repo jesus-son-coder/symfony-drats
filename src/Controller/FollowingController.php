@@ -27,9 +27,11 @@ class FollowingController extends Controller
         /* Eviter que l'utilisateur connecté puisse exécuter l'action : */
         if($userToFollow->getId() !== $currentUser->getId()) {
 
-            /* Ajouter le User en paramètre dans sa liste de Followers : */
+            /* Ajouter le User en paramètre dans sa liste de Followers :
             $currentUser->getFollowing()
-                ->add($userToFollow);
+                ->add($userToFollow);  */
+
+            $currentUser->follow($userToFollow);
 
             $this->getDoctrine()
                 ->getManager()
