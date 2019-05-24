@@ -52,6 +52,14 @@ class User implements UserInterface, \Serializable
      */
     private $email;
 
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=4, max=50)
+     */
+    private $fullName;
+
     /**
      * @var array
      * @ORM\Column(type="simple_array")
@@ -82,18 +90,19 @@ class User implements UserInterface, \Serializable
      */
     private $following;
 
+
     /**
-     * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank()
-     * @Assert\Length(min=4, max=50)
+     * @ORM\ManyToMany(targetEntity="App\Entity\MicroPost", mappedBy="likedBy")
      */
-    private $fullName;
+    private $postsliked;
+
 
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->followers = new ArrayCollection();
         $this->following = new ArrayCollection();
+        $this->postsliked = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -283,6 +292,17 @@ class User implements UserInterface, \Serializable
 
         $this->getFollowing()->add($userToFollow);
     }
+
+    /**
+     * @return Collection
+     */
+    public function getPostsliked()
+    {
+        return $this->postsliked;
+    }
+
+
+
 
 
 }

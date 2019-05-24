@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
@@ -32,16 +33,31 @@ class MicroPost
      */
     private $time;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="postsliked")
+     * @ORM\JoinTable(name="post_likes",
+     *     joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")})
+     */
+    private $likedBy;
+
+
+    public function __construct()
+    {
+        $this->likedBy = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getText(): ?string
     {
@@ -86,4 +102,28 @@ class MicroPost
     {
         $this->time = new \DateTime();
     }
+
+    /**
+     * @return Collection
+     */
+    public function getLikedBy()
+    {
+        return $this->likedBy;
+    }
+
+    /**
+     * @param mixed $likedBy
+     */
+    public function like(User $user): void
+    {
+        if($this->likedBy->contains($user)){
+            return;
+        }
+        $this->likedBy->add($user);
+    }
+
+
+
+
+
 }
