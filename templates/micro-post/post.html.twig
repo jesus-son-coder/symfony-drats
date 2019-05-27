@@ -2,4 +2,74 @@
 
 {% block body %}
     {{ include('micro-post/partials/_post.html.twig', { 'post': post}) }}
+
+    {# Display the Like and Unlike Button: #}
+    {% set isLiked = post.getLikedBy.contains(app.user) %}
+
+    <div class="pt-2">
+        {# Like Button #}
+        <button style="display: {% if not isLiked %}block{% else %}none{% endif %}"
+                class="btn btn-outline-secondary btn-sm" id="like">Like
+            <span class="badge badge-light" id="likes-like">{{ post.getLikedBy.count }}</span>
+        </button>
+
+        {# UnLike Button #}
+        <button style="display: {% if isLiked %}block{% else %}none{% endif %}"
+                class="btn btn-outline-danger btn-sm" id="unlike">UnLike
+            <span class="badge badge-light" id="likes-unlike">{{ post.getLikedBy.count }}</span>
+        </button>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        var likeButton = document.getElementById('like');
+        var unlikeButton = document.getElementById('unlike');
+
+        addOnClick(
+            likeButton,
+            unlikeButton,
+            document.getElementById('likes-unlike'),
+            '{{ path('likes_like', {'id': post.id}) }}'
+        );
+
+        addOnClick(
+            unlikeButton,
+            likeButton,
+            document.getElementById('likes-like'),
+            '{{ path('likes_unlike', {'id': post.id}) }}'
+        );
+
+        function switchButtons(button, oppositeButton) {
+            button.disabled = false ;
+            button.style.display = 'none';
+            oppositeButton.style.display = 'block';
+        }
+
+        function addOnClick(button, oppositeButton, likeCount, path) {
+            button.addEventListener('click', function(event){
+
+                {# Empêcher le click sur le bouton "Like" pour un Utilisateur non authentifié.
+                    Il est redirigé vers la page de création de compte : #}
+                {% if not app.user %}
+                    return window.location.replace('{{ path('user_register') }}')
+                {% endif %}
+
+                button.disabled = true;
+
+                fetch(path, {'credentials': 'include'}).then(function(response){
+                    response.json().then(function(json) {
+                        likeCount.innerText = json.count;
+                        switchButtons(button, oppositeButton);
+                    })
+                }).catch(function() {
+                    switchButtons(button, oppositeButton);
+                });
+
+                event.preventDefault();
+            });
+        }
+    </script>
 {% endblock %}
