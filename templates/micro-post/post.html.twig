@@ -28,6 +28,7 @@
         var likeButton = document.getElementById('like');
         var unlikeButton = document.getElementById('unlike');
 
+        /** Event Handler for "Like" button click : */
         addOnClick(
             likeButton,
             unlikeButton,
@@ -35,6 +36,7 @@
             '{{ path('likes_like', {'id': post.id}) }}'
         );
 
+        /** Event Handler for "UnLike" button click : */
         addOnClick(
             unlikeButton,
             likeButton,
@@ -57,6 +59,7 @@
                     return window.location.replace('{{ path('user_register') }}')
                 {% endif %}
 
+                {# On rends indisponible le bouton sur lequel on a cliqué : #}
                 button.disabled = true;
 
                 fetch(path, {'credentials': 'include'}).then(function(response){
