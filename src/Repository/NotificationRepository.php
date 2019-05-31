@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Notification;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -18,6 +19,18 @@ class NotificationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Notification::class);
     }
+
+    public function findUnseenByUser(User $user)
+    {
+        $qb = $this->createQueryBuilder('n');
+
+        return $qb->select('count(n)')
+            ->where('n.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult(); // Scalar value is for example an Integer.
+    }
+
 
     // /**
     //  * @return Notification[] Returns an array of Notification objects
