@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Security(is_granted('ROLE_USER')
+ * @Security("is_granted('ROLE_USER')")
  * @Route("/notification")
  */
 class NotificationController extends Controller
@@ -26,11 +26,11 @@ class NotificationController extends Controller
     }
 
     /**
-     * @Route("/unread-count", name="notification_unead")
+     * @Route("/unread-count", name="notification_unread")
      */
     public function unreadCount()
     {
-        new JsonResponse([
+        return new JsonResponse([
                 'count' => $this->notificationRepository->findUnseenByUser($this->getUser())
             ]
         );

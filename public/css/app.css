@@ -1,4 +1,8 @@
 div.container {
-    margin-top: 20px;
+   /* margin-top: 20px; */
+}
+
+nav.navbar.navbar-expand-md {
+    background-color: #d0cccc;
 }
 
